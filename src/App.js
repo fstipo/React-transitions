@@ -1,7 +1,18 @@
+import React from 'react';
 import './App.css';
+import GetPokemon from './components/GetPokemon';
 
-function App() {
-  return <div className="App display-3 my-3">Hello 😘</div>;
-}
+const App = () => {
+  return (
+    <div className="App  my-3">
+      <h1 className="display-3">Pokedex memory game</h1>
+      <p>
+        Test your Poke-memory by guessing which Pokemon is next — before it
+        appears.
+      </p>
+      <GetPokemon />
+    </div>
+  );
+};
 
 export default App;
