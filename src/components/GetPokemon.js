@@ -1,23 +1,34 @@
-import React, { useState } from 'react';
-import { fetchData } from './fetchData';
+import React, { useState, Suspense, useTransition } from 'react';
+import { fetchData, suspensify } from './fetchData';
+
+let initialPokemon = suspensify(fetchData(1));
 
 const GetPokemon = () => {
-  const [pokemonId, setPokemonId] = useState(1);
-  const [pokemon, setPokemon] = useState(pokemonId);
-  fetchData(pokemonId).then((data) => setPokemon(data));
+  const [pokemonResource, setPokemonResource] = useState(initialPokemon);
+  let pokemon = pokemonResource.read();
+  let [isPending, startTransition] = useTransition();
 
   return (
     <>
       <button
         type="button"
         className="my-3 btn btn-danger"
-        onClick={() => setPokemonId(pokemon.id + 1)}
+        onClick={() =>
+          startTransition(() =>
+            setPokemonResource(suspensify(fetchData(pokemon.id + 1)))
+          )
+        }
       >
         Change pokemon
       </button>
-      <div className="container display-2 text-start text-primary">
-        {pokemon.name}
-      </div>
+      <Suspense fallback="loading...">
+        <div
+          style={{ opacity: isPending ? '0.2' : '1' }}
+          className="container display-2 text-start text-primary"
+        >
+          {pokemon.name}
+        </div>
+      </Suspense>
     </>
   );
 };
