@@ -31,7 +31,7 @@ export const suspensify = (promise) => {
 };
 
 export const fetchData = (id = 1) =>
-  fetch(`https://pokeapi.co/api/v2/pokemons/${id}`)
+  fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
     .then((data) => data.json())
     .then(sleep(500))
     .catch((err) => console.log(err.name));
